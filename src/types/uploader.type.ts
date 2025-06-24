@@ -6,4 +6,4 @@ export type Options = UploaderOptions & {
 
 export type UserOptions = Partial<Options>
 
-export type DefaultUserFile = Pick<UserFile, 'name' | 'id' | 'url'>
+export type DefaultFile = Pick<UserFile, 'name' | 'id' | 'url'>

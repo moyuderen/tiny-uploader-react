@@ -4,13 +4,14 @@ import { Drop } from './Drop'
 import { FileList } from './FileList'
 import { defaultUploaderProps } from '../config'
 import { useSdk } from '../hooks/useSdk'
-import type { UserOptions, DefaultUserFile } from '../types'
+import type { UserOptions, DefaultFile } from '../types'
 
 export const SdkContext = createContext<null | Uploader>(null)
 
 type UploaderReactProps = {
   options?: UserOptions
-  defaultFileList?: DefaultUserFile[]
+  defaultFileList?: DefaultFile[]
+  onClick?: (file: FileContext) => void
   onChange?: (file: FileContext, fileList: FileContext[]) => void
   onExceed?: (slectedFiles: FileContext[], fileList: FileContext[]) => void
   onFileAdded?: (file: FileContext, fileList: FileContext[]) => void
@@ -23,7 +24,7 @@ type UploaderReactProps = {
   onAllFilesSuccess?: (fileList: FileContext[]) => void
 }
 
-export const UploaderReact = ({ options, defaultFileList }: UploaderReactProps) => {
+export const UploaderReact = ({ options, defaultFileList, onClick }: UploaderReactProps) => {
   const finalOptions = Object.assign(defaultUploaderProps, options)
   const sdk = useSdk(finalOptions)
   const [files, setFiles] = useState<FileContext[]>([])
@@ -51,7 +52,7 @@ export const UploaderReact = ({ options, defaultFileList }: UploaderReactProps) 
     <SdkContext.Provider value={sdk}>
       <div className="tiny-uploader-container">
         {finalOptions.drag ? <Drop /> : 'Click Upload'}
-        <FileList fileList={files} />
+        <FileList fileList={files} onClick={(file) => onClick?.(file)} />
       </div>
     </SdkContext.Provider>
   )

@@ -12,10 +12,11 @@ import RetryIcon from '../icons/RetryIcon'
 
 type FileItem = {
   file: FileContext
+  onClick: (file: FileContext) => void
 }
 
 export const FileItem = (props: PropsWithChildren<FileItem>) => {
-  const { file } = props
+  const { file, onClick } = props
   const [progressWidth, setProgressWidth] = useState<string>('0%')
   const sdk = useContext(SdkContext)
   const parseProgress = (progress: number) => {
@@ -35,7 +36,11 @@ export const FileItem = (props: PropsWithChildren<FileItem>) => {
     <div className="tiny-uploader-file" data-status={file.status} data-id={file.id}>
       <div className="tiny-uploader-info-wrap">
         <FileIcon size={16} />
-        <div className="tiny-uploader-filename-container" title={'file.name'}>
+        <div
+          className="tiny-uploader-filename-container"
+          title={'file.name'}
+          onClick={() => onClick(file)}
+        >
           <div
             className={clsx({
               'tiny-uploader-filename': true,

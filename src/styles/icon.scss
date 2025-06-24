@@ -1,0 +1,17 @@
+.tiny-uploader-icon-upload path {
+  fill: var(--tiny-color-primary);
+}
+
+.tiny-uploader-icon--loading {
+  animation: tiny-circle infinite 0.75s linear;
+  margin-right: 4px;
+}
+
+@keyframes tiny-circle {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
