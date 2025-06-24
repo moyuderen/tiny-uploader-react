@@ -1,0 +1,135 @@
+.tiny-uploader-file-list {
+  margin-top: 6px;
+}
+
+.tiny-uploader-info-wrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 22px;
+  margin: 6px 0;
+  padding: 0px 6px;
+  color: #606266;
+  font-size: 14px;
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.tiny-uploader-info-wrap:hover {
+  background-color: var(--tiny-fill-color-lighter);
+
+  .tiny-uploader-filename {
+    color: var(--tiny-color-primary);
+  }
+
+  .tiny-uploader-name-fail {
+    color: var(--tiny-color-error);
+  }
+}
+
+.tiny-uploader-filename-container {
+  flex: 1;
+  width: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+}
+
+.tiny-uploader-filename {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tiny-uploader-name-fail {
+  color: var(--tiny-color-error);
+}
+
+.tiny-uploader-size {
+  font-size: var(--tiny-font-size-small);
+}
+
+.tiny-uploader-error-meessage {
+  color: var(--tiny-color-error);
+  font-size: var(--tiny-font-size-extra-small);
+}
+
+.tiny-uploader-file-icon {
+  margin-right: 4px;
+}
+
+.tiny-uploader-status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.tiny-uploader-progress-wrap {
+  position: absolute;
+  top: 22px;
+  left: 2px;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  z-index: -1;
+  background-color: var(--tiny-fill-color-light);
+  opacity: 0.8;
+}
+
+.tiny-uploader-progress {
+  height: 2px;
+  border-radius: 2px;
+  transition: width 1s;
+}
+
+.tiny-uploader-percent {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-align: right;
+}
+
+.tiny-uploader-size {
+  width: 70px;
+  text-align: left;
+  margin-left: 8px;
+  color: var(--tiny-text-color-secondary);
+}
+
+.tiny-uploader--reading {
+  background-color: var(--tiny-color-reading);
+}
+
+.tiny-uploader--uploading {
+  background-color: var(--tiny-color-primary);
+}
+
+.tiny-uploader--success {
+  background-color: var(--tiny-color-success);
+}
+
+.tiny-uploader--fail {
+  background-color: var(--tiny-color-error);
+}
+
+.tiny-uploader-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.tiny-uploader-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 8px;
+  overflow: hidden;
+}
