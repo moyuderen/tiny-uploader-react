@@ -1,4 +1,11 @@
-import { createContext, useEffect, useState, forwardRef, useImperativeHandle } from 'react'
+import {
+  createContext,
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  type PropsWithChildren
+} from 'react'
 import {
   create,
   Callbacks,
@@ -7,15 +14,18 @@ import {
   type UserFile
 } from '@tinyuploader/sdk'
 import { Drop } from './Drop'
+import { Trigger } from './Trigger'
 import { FileList } from './FileList'
 import { defaults } from '../config'
 import type { UploaderProps, UploaderHandle } from '../types'
 
 export const SdkContext = createContext<null | Sdk>(null)
 
-export const Uploader = forwardRef<UploaderHandle, UploaderProps>(
-  (
-    {
+export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderProps>>(
+  (props, ref) => {
+    const {
+      children,
+      tipRender,
       options,
       defaultFileList,
       onClick,
@@ -29,9 +39,7 @@ export const Uploader = forwardRef<UploaderHandle, UploaderProps>(
       onSuccess,
       onFail,
       onAllFilesSuccess
-    }: UploaderProps,
-    ref
-  ) => {
+    } = props
     const finalOptions = Object.assign(defaults, options)
     const [sdk, setSdk] = useState<Sdk | null>(null)
     const [files, setFiles] = useState<FileContext[]>([])
@@ -110,7 +118,8 @@ export const Uploader = forwardRef<UploaderHandle, UploaderProps>(
     return (
       <SdkContext.Provider value={sdk}>
         <div className="tiny-uploader-container">
-          {finalOptions.drag ? <Drop /> : 'Click Upload'}
+          {finalOptions.drag ? <Drop>{children}</Drop> : <Trigger>{children}</Trigger>}
+          {tipRender?.()}
           <FileList fileList={files} onClick={(file) => onClick?.(file)} />
         </div>
       </SdkContext.Provider>

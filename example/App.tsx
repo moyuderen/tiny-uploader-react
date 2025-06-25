@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Uploader,
+  UploadIcon,
   CheckStatus,
   type DefaultFile,
   type FileContext,
@@ -33,6 +34,7 @@ function App() {
         ref={uploader}
         defaultFileList={defaultFileList}
         options={{
+          drag: true,
           action: 'http://localhost:3000/file/upload',
           autoUpload: false,
           data: () => ({ name: 'tinyuploader' }),
@@ -61,7 +63,16 @@ function App() {
         }}
         onClick={onPreview}
         onChange={onChange}
-      />
+        tipRender={() => (
+          <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
+        )}
+      >
+        <UploadIcon size={64} style={{ transform: 'scale(0.65)' }} />
+        <div className="tiny-uploader-drop_text">
+          Drop file here or <em>click to upload</em>
+        </div>
+        <div className="tiny-uploader-drop_hint">Support for a single or bulk upload.</div>
+      </Uploader>
 
       <br />
 

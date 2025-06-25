@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { UploaderOptions as SdkOptions, UserFile, FileContext } from '@tinyuploader/sdk'
 
 export type { SdkOptions, FileContext }
@@ -11,6 +12,10 @@ export type Options = Partial<UploaderOptions>
 export type DefaultFile = Pick<UserFile, 'name' | 'id' | 'url'>
 
 export type UploaderProps = {
+  /**
+   * Children components to be rendered tip info
+   */
+  tipRender?: () => ReactNode
   /**
    * Options for the uploader SDK
    */

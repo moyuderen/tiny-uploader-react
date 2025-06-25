@@ -1,9 +1,8 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, type PropsWithChildren } from 'react'
 import { SdkContext } from './Uploader'
-import { Button } from './Button'
 import UploadIcon from '../icons/UploadIcon'
 
-export const Drop = () => {
+export const Drop = ({ children }: PropsWithChildren) => {
   const sdk = useContext(SdkContext)
 
   useEffect(() => {
@@ -11,13 +10,15 @@ export const Drop = () => {
     sdk.assignDrop(document.querySelector('.tiny-uploader-drop')!)
     sdk.assignBrowse(document.querySelector('.tiny-uploader-drop')!)
   }, [sdk])
-  return (
-    <div className="tiny-uploader-drop">
+
+  const defaultChildren = () => (
+    <>
       <UploadIcon size={64} style={{ transform: 'scale(0.65)' }} />
-      <div>
-        <span style={{ marginRight: '6px' }}>Drop file here or</span>
-        <Button>click to upload</Button>
+      <div className="tiny-uploader-drop_text">
+        Drop file here or <em>click to upload</em>
       </div>
-    </div>
+      <div className="tiny-uploader-drop_hint">{/* some hint */}</div>
+    </>
   )
+  return <div className="tiny-uploader-drop">{children || defaultChildren()}</div>
 }

@@ -10,6 +10,19 @@
   border-radius: 4px;
   cursor: pointer;
   background-color: var(--tiny-fill-color-extra-light);
+
+  .tiny-uploader-drop_text {
+    em {
+      color: var(--tiny-color-primary);
+      font-style: normal;
+    }
+  }
+
+  .tiny-uploader-drop_hint {
+    color: var(--tiny-text-color-secondary);
+    font-size: var(--tiny-font-size-small);
+    text-align: center;
+  }
 }
 
 .tiny-uploader-drop:hover {
@@ -17,5 +30,14 @@
 }
 
 .tiny-uploader-button {
+  cursor: pointer;
   color: var(--tiny-color-primary);
+  font-size: 14px;
+}
+
+.tiny-uploader-tip {
+  color: var(--tiny-text-color-secondary);
+  font-size: var(--tiny-font-size-extra-small);
+  margin-top: 6px;
+  margin-left: 4px;
 }
