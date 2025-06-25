@@ -93,6 +93,8 @@ export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderPro
         onAllFilesSuccess?.(fileList)
       )
 
+      sdkInstance.setDefaultFileList(defaultFileList as UserFile[])
+      
       setSdk(sdkInstance)
     }, [])
 
