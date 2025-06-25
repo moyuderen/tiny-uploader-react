@@ -81,3 +81,8 @@ export type UploaderProps = {
    */
   onAllFilesSuccess?: (fileList: FileContext[]) => void
 }
+
+export type UploaderHandle = {
+  submit: () => void
+  clear: () => void
+}
