@@ -35,12 +35,12 @@ export const FileItem = (props: PropsWithChildren<FileItem>) => {
   return (
     <div className="tiny-uploader-file" data-status={file.status} data-id={file.id}>
       <div className="tiny-uploader-info-wrap">
-        <FileIcon size={16} />
         <div
           className="tiny-uploader-filename-container"
           title={file.name}
           onClick={() => onClick(file)}
         >
+          <FileIcon size={16} />
           <div
             className={clsx({
               'tiny-uploader-filename': true,
@@ -58,7 +58,7 @@ export const FileItem = (props: PropsWithChildren<FileItem>) => {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div className="tiny-uploader-status">
             {(file.status === FileStatus.Ready || file.status === FileStatus.Reading) && (
-              <LoadingIcon size={16} />
+              <LoadingIcon size={14} />
             )}
 
             {file.errorMessage && (
@@ -87,6 +87,7 @@ export const FileItem = (props: PropsWithChildren<FileItem>) => {
                 <PlayIcon size={16} />
               </span>
             )}
+
             {(file.status === FileStatus.CheckFail ||
               file.status === FileStatus.Fail ||
               file.status === FileStatus.UploadFail) && (

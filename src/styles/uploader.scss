@@ -31,13 +31,20 @@
 
 .tiny-uploader-button {
   cursor: pointer;
-  color: var(--tiny-color-primary);
   font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid var(--tiny-border-color-dark);
+  padding: 3px var(--tiny-font-size-base);
+}
+
+.tiny-uploader-button:hover {
+  color: var(--tiny-color-primary);
+  border: 1px solid var(--tiny-color-primary);
 }
 
 .tiny-uploader-tip {
   color: var(--tiny-text-color-secondary);
   font-size: var(--tiny-font-size-extra-small);
   margin-top: 6px;
-  margin-left: 4px;
+  margin-left: 2px;
 }

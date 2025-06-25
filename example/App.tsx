@@ -36,7 +36,7 @@ function App() {
         options={{
           drag: true,
           action: 'http://localhost:3000/file/upload',
-          autoUpload: false,
+          autoUpload: true,
           data: () => ({ name: 'tinyuploader' }),
           headers: {
             'XXX-X-Requested-With': 'XXX-XXXX-XXX'
