@@ -1,6 +1,6 @@
 import './styles/index.scss'
-import { UploaderReact as Uploader } from './components/Uploader'
+import { Uploader } from './components/Uploader'
+export { CheckStatus } from '@tinyuploader/sdk'
 export * from './types/'
-export type { FileContext } from '@tinyuploader/sdk'
 
 export { Uploader }

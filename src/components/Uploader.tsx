@@ -1,46 +1,88 @@
 import { createContext, useEffect, useState } from 'react'
-import { Callbacks, type Uploader, FileContext, type UserFile } from '@tinyuploader/sdk'
+import {
+  create,
+  Callbacks,
+  type Uploader as Sdk,
+  FileContext,
+  type UserFile
+} from '@tinyuploader/sdk'
 import { Drop } from './Drop'
 import { FileList } from './FileList'
-import { defaultUploaderProps } from '../config'
-import { useSdk } from '../hooks/useSdk'
-import type { UserOptions, DefaultFile } from '../types'
+import { defaults } from '../config'
+import type { UploaderProps } from '../types'
 
-export const SdkContext = createContext<null | Uploader>(null)
+export const SdkContext = createContext<null | Sdk>(null)
 
-type UploaderReactProps = {
-  options?: UserOptions
-  defaultFileList?: DefaultFile[]
-  onClick?: (file: FileContext) => void
-  onChange?: (file: FileContext, fileList: FileContext[]) => void
-  onExceed?: (slectedFiles: FileContext[], fileList: FileContext[]) => void
-  onFileAdded?: (file: FileContext, fileList: FileContext[]) => void
-  onFilesAdded?: (fileList: FileContext[]) => void
-  onRemoved?: (file: FileContext, fileList: FileContext[]) => void
-  onProgress?: (file: FileContext, fileList: FileContext[]) => void
-  onUploaded?: (file: FileContext, fileList: FileContext[]) => void
-  onSuccess?: (file: FileContext, fileList: FileContext[]) => void
-  onFail?: (file: FileContext, fileList: FileContext[]) => void
-  onAllFilesSuccess?: (fileList: FileContext[]) => void
-}
-
-export const UploaderReact = ({ options, defaultFileList, onClick }: UploaderReactProps) => {
-  const finalOptions = Object.assign(defaultUploaderProps, options)
-  const sdk = useSdk(finalOptions)
+export const Uploader = ({
+  options,
+  defaultFileList,
+  onClick,
+  onChange,
+  onExceed,
+  onFileAdded,
+  onFilesAdded,
+  onRemoved,
+  onProgress,
+  onUploaded,
+  onSuccess,
+  onFail,
+  onAllFilesSuccess
+}: UploaderProps) => {
+  const finalOptions = Object.assign(defaults, options)
+  const [sdk, setSdk] = useState<Sdk | null>(null)
   const [files, setFiles] = useState<FileContext[]>([])
 
   useEffect(() => {
-    sdk?.on(Callbacks.FileChange, (_file: FileContext, fileList: FileContext[]) => {
+    const sdkInstance = sdk || create(finalOptions)
+
+    sdkInstance.on(Callbacks.FileChange, (file: FileContext, fileList: FileContext[]) => {
       const timer = setTimeout(() => {
         clearTimeout(timer)
+        onChange?.(file, fileList)
         setFiles([...fileList])
       }, 0)
     })
 
-    sdk?.on(Callbacks.FileProgress, (_file: FileContext, fileList: FileContext[]) => {
+    sdkInstance.on(Callbacks.Exceed, (selectedFiles: FileContext[], fileList: FileContext[]) =>
+      onExceed?.(selectedFiles, fileList)
+    )
+
+    sdkInstance.on(Callbacks.FileAdded, (file: FileContext, fileList: FileContext[]) =>
+      onFileAdded?.(file, fileList)
+    )
+
+    sdkInstance.on(Callbacks.FilesAdded, (fileList: FileContext[]) => onFilesAdded?.(fileList))
+
+    sdkInstance.on(Callbacks.FileRemove, (file: FileContext, fileList: FileContext[]) =>
+      onRemoved?.(file, fileList)
+    )
+
+    sdkInstance.on(Callbacks.FileProgress, (file: FileContext, fileList: FileContext[]) => {
       setFiles([...fileList])
+      onProgress?.(file, fileList)
     })
-  }, [sdk])
+
+    sdkInstance.on(Callbacks.FileUploadSuccess, (file: FileContext, fileList: FileContext[]) =>
+      onUploaded?.(file, fileList)
+    )
+
+    const failCallbacks = [Callbacks.FileAddFail, Callbacks.FileUploadFail, Callbacks.FileFail]
+    failCallbacks.forEach((callbackName) => {
+      sdkInstance.on(callbackName, (file: FileContext, fileList: FileContext[]) => {
+        onFail?.(file, fileList)
+      })
+    })
+
+    sdkInstance.on(Callbacks.FileSuccess, (file: FileContext, fileList: FileContext[]) =>
+      onSuccess?.(file, fileList)
+    )
+
+    sdkInstance.on(Callbacks.AllFileSuccess, (fileList: FileContext[]) =>
+      onAllFilesSuccess?.(fileList)
+    )
+
+    setSdk(sdkInstance)
+  }, [])
 
   useEffect(() => {
     if (sdk) {

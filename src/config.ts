@@ -1,6 +1,6 @@
 import { defaultOptions } from '@tinyuploader/sdk'
 
-export const defaultUploaderProps = {
+export const defaults = {
   drag: true,
   ...defaultOptions
 }

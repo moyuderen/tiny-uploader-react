@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@tinyuploader/sdk':
-        specifier: 2.3.0-alpha.2
-        version: 2.3.0-alpha.2(hashion@0.0.11(spark-md5@3.0.2))
+        specifier: 2.3.0-alpha.3
+        version: 2.3.0-alpha.3(hashion@0.0.11(spark-md5@3.0.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -636,8 +636,8 @@ packages:
   '@rushstack/ts-command-line@5.0.1':
     resolution: {integrity: sha512-bsbUucn41UXrQK7wgM8CNM/jagBytEyJqXw/umtI8d68vFm1Jwxh1OtLrlW7uGZgjCWiiPH6ooUNa1aVsuVr3Q==}
 
-  '@tinyuploader/sdk@2.3.0-alpha.2':
-    resolution: {integrity: sha512-SPn1Wmq6S8dX03G0cT4yp75sCBlmdNXijobVwpCzQHx45ljn2OcPErp2yb5GqB7kWK23ZmYJcZCtgLFnOrV//Q==}
+  '@tinyuploader/sdk@2.3.0-alpha.3':
+    resolution: {integrity: sha512-TPYop3IcrVOjPkKuyDS9JDVIBsY+caD0R/IYr7clRvHiGMA2MOMS/fBp7XaZzLf5xURNuj/6FAvP7M43rP5X9Q==}
     peerDependencies:
       hashion: ^0.0.11
 
@@ -2150,7 +2150,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@tinyuploader/sdk@2.3.0-alpha.2(hashion@0.0.11(spark-md5@3.0.2))':
+  '@tinyuploader/sdk@2.3.0-alpha.3(hashion@0.0.11(spark-md5@3.0.2))':
     dependencies:
       hashion: 0.0.11(spark-md5@3.0.2)
 

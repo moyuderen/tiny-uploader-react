@@ -38,7 +38,7 @@ export const FileItem = (props: PropsWithChildren<FileItem>) => {
         <FileIcon size={16} />
         <div
           className="tiny-uploader-filename-container"
-          title={'file.name'}
+          title={file.name}
           onClick={() => onClick(file)}
         >
           <div
