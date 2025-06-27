@@ -41,7 +41,7 @@ function App() {
           headers: {
             'XXX-X-Requested-With': 'XXX-XXXX-XXX'
           },
-          async checkRequest(file) {
+          async checkRequest(file: FileContext) {
             const params = new URLSearchParams({
               filename: file.name,
               hash: file.hash,
@@ -51,7 +51,7 @@ function App() {
             const { data } = await response.json()
             return data
           },
-          async mergeRequest(file) {
+          async mergeRequest(file: FileContext) {
             const params = new URLSearchParams({
               filename: file.name,
               hash: file.hash
