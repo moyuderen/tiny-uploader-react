@@ -1,25 +1,11 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-  type PropsWithChildren
-} from 'react'
-import {
-  create,
-  Callbacks,
-  type Uploader as Sdk,
-  FileContext,
-  type UserFile
-} from '@tinyuploader/sdk'
+import { useEffect, useState, forwardRef, useImperativeHandle, type PropsWithChildren } from 'react'
+import { create, Callbacks, FileContext, type UserFile } from '@tinyuploader/sdk'
 import { Drop } from './Drop'
 import { Trigger } from './Trigger'
 import { FileList } from './FileList'
 import { defaults } from '../config'
 import type { UploaderProps, UploaderHandle } from '../types'
-
-export const SdkContext = createContext<null | Sdk>(null)
+import { UploaderProvider, useUploader } from '../hooks/uploader-provider'
 
 export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderProps>>(
   (props, ref) => {
@@ -40,14 +26,18 @@ export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderPro
       onFail,
       onAllFilesSuccess
     } = props
+    const { sdk, setUploader } = useUploader()
     const finalOptions = Object.assign(defaults, options)
-    const [sdk, setSdk] = useState<Sdk | null>(null)
     const [files, setFiles] = useState<FileContext[]>([])
 
     useEffect(() => {
-      const sdkInstance = sdk || create(finalOptions)
+      setUploader(create(finalOptions))
+    }, [])
 
-      sdkInstance.on(Callbacks.FileChange, (file: FileContext, fileList: FileContext[]) => {
+    useEffect(() => {
+      if (!sdk) return
+
+      sdk.on(Callbacks.FileChange, (file: FileContext, fileList: FileContext[]) => {
         const timer = setTimeout(() => {
           clearTimeout(timer)
           onChange?.(file, fileList)
@@ -55,54 +45,46 @@ export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderPro
         }, 0)
       })
 
-      sdkInstance.on(Callbacks.Exceed, (selectedFiles: FileContext[], fileList: FileContext[]) =>
+      sdk.on(Callbacks.Exceed, (selectedFiles: FileContext[], fileList: FileContext[]) =>
         onExceed?.(selectedFiles, fileList)
       )
 
-      sdkInstance.on(Callbacks.FileAdded, (file: FileContext, fileList: FileContext[]) =>
+      sdk.on(Callbacks.FileAdded, (file: FileContext, fileList: FileContext[]) =>
         onFileAdded?.(file, fileList)
       )
 
-      sdkInstance.on(Callbacks.FilesAdded, (fileList: FileContext[]) => onFilesAdded?.(fileList))
+      sdk.on(Callbacks.FilesAdded, (fileList: FileContext[]) => onFilesAdded?.(fileList))
 
-      sdkInstance.on(Callbacks.FileRemove, (file: FileContext, fileList: FileContext[]) =>
+      sdk.on(Callbacks.FileRemove, (file: FileContext, fileList: FileContext[]) =>
         onRemoved?.(file, fileList)
       )
 
-      sdkInstance.on(Callbacks.FileProgress, (file: FileContext, fileList: FileContext[]) => {
+      sdk.on(Callbacks.FileProgress, (file: FileContext, fileList: FileContext[]) => {
         setFiles([...fileList])
         onProgress?.(file, fileList)
       })
 
-      sdkInstance.on(Callbacks.FileUploadSuccess, (file: FileContext, fileList: FileContext[]) =>
+      sdk.on(Callbacks.FileUploadSuccess, (file: FileContext, fileList: FileContext[]) =>
         onUploaded?.(file, fileList)
       )
 
       const failCallbacks = [Callbacks.FileAddFail, Callbacks.FileUploadFail, Callbacks.FileFail]
       failCallbacks.forEach((callbackName) => {
-        sdkInstance.on(callbackName, (file: FileContext, fileList: FileContext[]) => {
+        sdk.on(callbackName, (file: FileContext, fileList: FileContext[]) => {
           onFail?.(file, fileList)
         })
       })
 
-      sdkInstance.on(Callbacks.FileSuccess, (file: FileContext, fileList: FileContext[]) =>
+      sdk.on(Callbacks.FileSuccess, (file: FileContext, fileList: FileContext[]) =>
         onSuccess?.(file, fileList)
       )
 
-      sdkInstance.on(Callbacks.AllFileSuccess, (fileList: FileContext[]) =>
-        onAllFilesSuccess?.(fileList)
-      )
+      sdk.on(Callbacks.AllFileSuccess, (fileList: FileContext[]) => onAllFilesSuccess?.(fileList))
 
-      sdkInstance.setDefaultFileList(defaultFileList as UserFile[])
-      
-      setSdk(sdkInstance)
-    }, [])
-
-    useEffect(() => {
-      if (sdk) {
+      if (defaultFileList && defaultFileList.length > 0) {
         sdk.setDefaultFileList(defaultFileList as UserFile[])
       }
-    }, [defaultFileList])
+    }, [sdk])
 
     useImperativeHandle(
       ref,
@@ -118,13 +100,19 @@ export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderPro
     )
 
     return (
-      <SdkContext.Provider value={sdk}>
-        <div className="tiny-uploader-container">
-          {finalOptions.drag ? <Drop>{children}</Drop> : <Trigger>{children}</Trigger>}
-          {tipRender?.()}
-          <FileList fileList={files} onClick={(file) => onClick?.(file)} />
-        </div>
-      </SdkContext.Provider>
+      <div className="tiny-uploader-container">
+        {finalOptions.drag ? <Drop>{children}</Drop> : <Trigger>{children}</Trigger>}
+        {tipRender?.()}
+        <FileList fileList={files} onClick={(file) => onClick?.(file)} />
+      </div>
     )
   }
 )
+
+export default ({ ...props }) => {
+  return (
+    <UploaderProvider>
+      <Uploader {...props} />
+    </UploaderProvider>
+  )
+}

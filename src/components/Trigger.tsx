@@ -1,10 +1,10 @@
-import { useEffect, useContext, type PropsWithChildren } from 'react'
-import { SdkContext } from './Uploader'
+import { useEffect, type PropsWithChildren } from 'react'
+import { useUploader } from '../hooks/uploader-provider'
 import { Button } from './Button'
 
 type Props = {}
 export const Trigger = ({ children }: PropsWithChildren<Props>) => {
-  const sdk = useContext(SdkContext)
+  const { sdk } = useUploader()
 
   useEffect(() => {
     if (!sdk) return

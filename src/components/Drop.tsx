@@ -1,9 +1,9 @@
-import { useContext, useEffect, type PropsWithChildren } from 'react'
-import { SdkContext } from './Uploader'
+import { useEffect, type PropsWithChildren } from 'react'
+import { useUploader } from '../hooks/uploader-provider'
 import UploadIcon from '../icons/UploadIcon'
 
 export const Drop = ({ children }: PropsWithChildren) => {
-  const sdk = useContext(SdkContext)
+  const { sdk } = useUploader()
 
   useEffect(() => {
     if (!sdk) return

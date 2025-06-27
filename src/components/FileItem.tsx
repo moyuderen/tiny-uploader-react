@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext, type PropsWithChildren } from 'react'
+import { useEffect, useState, type PropsWithChildren } from 'react'
 import { clsx } from 'clsx'
 import { FileStatus, type FileContext } from '@tinyuploader/sdk'
-import { SdkContext } from './Uploader'
+import { useUploader } from '../hooks/uploader-provider'
 import FileIcon from '../icons/FileIcon'
 import LoadingIcon from '../icons/LoadingIcon'
 import SuccessIcon from '../icons/SuccessIcon'
@@ -18,7 +18,7 @@ type FileItem = {
 export const FileItem = (props: PropsWithChildren<FileItem>) => {
   const { file, onClick } = props
   const [progressWidth, setProgressWidth] = useState<string>('0%')
-  const sdk = useContext(SdkContext)
+  const { sdk } = useUploader()
   const parseProgress = (progress: number) => {
     return (progress * 100).toFixed(2)
   }
