@@ -1,0 +1,98 @@
+{
+  "name": "@tinyuploader/react",
+  "private": false,
+  "version": "1.1.0-alpha.0",
+  "author": "moyuderen",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "tinyuploader",
+    "uploader",
+    "upload",
+    "react",
+    "upload",
+    "file",
+    "large file",
+    "chunk",
+    "merge",
+    "retry",
+    "pause",
+    "resume",
+    "typescript",
+    "上传",
+    "分片上传",
+    "大文件",
+    "并发",
+    "重试",
+    "断点续传",
+    "秒传"
+  ],
+  "homepage": "https://moyuderen.github.io/tiny-uploader-react/en/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moyuderen/tiny-uploader-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/moyuderen/tiny-uploader-react/issues"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "change:alpha": "pnpm changeset pre enter alpha",
+    "change:beta": "pnpm changeset pre enter beta",
+    "change:rc": "pnpm changeset pre enter rc",
+    "change:stable": "pnpm changeset pre exit",
+    "change": "pnpm changeset",
+    "change-version": "pnpm changeset version",
+    "push-npm": "pnpm install && pnpm build && pnpm -F @tinyuploader/react publish"
+  },
+  "type": "module",
+  "sideEffects": [
+    "./dist/style.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/types/index.d.ts",
+  "module": "./dist/uploader.es.js",
+  "main": "./dist/uploader.umd.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/uploader.cjs.js",
+      "import": "./dist/uploader.es.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "dependencies": {
+    "@tinyuploader/sdk": "2.3.0-rc.0",
+    "clsx": "^2.1.1"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@microsoft/api-extractor": "^7.52.8",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "sass": "^1.89.2",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "unplugin-dts": "1.0.0-beta.0",
+    "vite": "^6.3.5"
+  }
+}

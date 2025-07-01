@@ -7,6 +7,12 @@ settings:
 importers:
 
   .:
+    devDependencies:
+      '@changesets/cli':
+        specifier: ^2.29.5
+        version: 2.29.5
+
+  packages/uploader:
     dependencies:
       '@tinyuploader/sdk':
         specifier: 2.3.0-rc.0
@@ -21,9 +27,6 @@ importers:
         specifier: '>=16.9.0'
         version: 19.1.0(react@19.1.0)
     devDependencies:
-      '@changesets/cli':
-        specifier: ^2.29.5
-        version: 2.29.5
       '@eslint/js':
         specifier: ^9.25.0
         version: 9.29.0
