@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@tinyuploader/react": "1.0.3"
+  },
+  "changesets": [
+    "calm-ties-smile"
+  ]
+}
