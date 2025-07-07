@@ -5,6 +5,7 @@
     "@tinyuploader/react": "1.0.3"
   },
   "changesets": [
-    "calm-ties-smile"
+    "calm-ties-smile",
+    "chubby-mails-eat"
   ]
 }

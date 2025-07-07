@@ -1,14 +1,15 @@
-import { useEffect, type PropsWithChildren } from 'react'
+import { useEffect, useRef, type PropsWithChildren } from 'react'
 import { useUploader } from '../hooks/uploader-provider'
 import UploadIcon from '../icons/UploadIcon'
 
 export const Drop = ({ children }: PropsWithChildren) => {
   const { sdk } = useUploader()
+  const dropRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!sdk) return
-    sdk.assignDrop(document.querySelector('.tiny-uploader-drop')!)
-    sdk.assignBrowse(document.querySelector('.tiny-uploader-drop')!)
+    sdk.assignDrop(dropRef.current!)
+    sdk.assignBrowse(dropRef.current!)
   }, [sdk])
 
   const defaultChildren = () => (
@@ -20,5 +21,9 @@ export const Drop = ({ children }: PropsWithChildren) => {
       <div className="tiny-uploader-drop_hint">{/* some hint */}</div>
     </>
   )
-  return <div className="tiny-uploader-drop">{children || defaultChildren()}</div>
+  return (
+    <div ref={dropRef} className="tiny-uploader-drop">
+      {children || defaultChildren()}
+    </div>
+  )
 }
