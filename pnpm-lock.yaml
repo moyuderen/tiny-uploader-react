@@ -97,8 +97,8 @@ importers:
         specifier: ^3.0.0
         version: 3.1.0(@types/react@19.1.8)(react@19.1.0)
       '@tinyuploader/react':
-        specifier: workspace:^
-        version: link:../packages/uploader
+        specifier: ^1.1.0-alpha.2
+        version: 1.1.0-alpha.2(hashion@0.0.11(spark-md5@3.0.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -1960,6 +1960,12 @@ packages:
   '@szmarczak/http-timer@5.0.1':
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
     engines: {node: '>=14.16'}
+
+  '@tinyuploader/react@1.1.0-alpha.2':
+    resolution: {integrity: sha512-O+ats+cCBr53ZnuphVZUUbb+qD8wep8ToepavlJ4qPqmuhIhqrllhFpCS6eg7O/qR+Y0/KS+Lk1jI6qyLCdVaA==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
 
   '@tinyuploader/sdk@2.3.0-rc.1':
     resolution: {integrity: sha512-KDQbwbiCAP4tDuKdunMIVbQedJn0j2/SSJc4bMX6brdEh4IK4VQ9E19q7B/q//UhZ+bqEw6UKz7vcLMXjJms/g==}
@@ -8965,6 +8971,15 @@ snapshots:
   '@szmarczak/http-timer@5.0.1':
     dependencies:
       defer-to-connect: 2.0.1
+
+  '@tinyuploader/react@1.1.0-alpha.2(hashion@0.0.11(spark-md5@3.0.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@tinyuploader/sdk': 2.3.0-rc.1(hashion@0.0.11(spark-md5@3.0.2))
+      clsx: 2.1.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+    transitivePeerDependencies:
+      - hashion
 
   '@tinyuploader/sdk@2.3.0-rc.1(hashion@0.0.11(spark-md5@3.0.2))':
     dependencies:

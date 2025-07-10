@@ -55,7 +55,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Build with VitePress
+      - name: Build
         run: pnpm docs:build
 
       - name: Upload artifact
