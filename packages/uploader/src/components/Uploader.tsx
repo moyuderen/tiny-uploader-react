@@ -27,7 +27,7 @@ export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderPro
       onAllFilesSuccess
     } = props
     const { sdk, setUploader } = useUploader()
-    const finalOptions = Object.assign(defaults, options)
+    const finalOptions = Object.assign({}, defaults, options)
     const [files, setFiles] = useState<FileContext[]>([])
 
     useEffect(() => {
@@ -85,6 +85,12 @@ export const Uploader = forwardRef<UploaderHandle, PropsWithChildren<UploaderPro
         sdk.setDefaultFileList(defaultFileList as UserFile[])
       }
     }, [sdk])
+
+    useEffect(() => {
+      if (defaultFileList && defaultFileList.length > 0) {
+        sdk?.setDefaultFileList(defaultFileList as UserFile[])
+      }
+    }, [defaultFileList])
 
     useImperativeHandle(
       ref,

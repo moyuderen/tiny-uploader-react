@@ -9,7 +9,7 @@ export const Trigger = ({ children }: PropsWithChildren<Props>) => {
 
   useEffect(() => {
     if (!sdk) return
-    sdk.assignBrowse(document.querySelector('.tiny-uplpader-trigger')!)
+    sdk.assignBrowse(triggerRef.current!)
   }, [sdk])
 
   return (
