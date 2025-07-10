@@ -1,5 +1,11 @@
 # @tinyuploader/react
 
+## 1.1.0-alpha.2
+
+### Patch Changes
+
+- optimize trriger bind
+
 ## 1.1.0-alpha.1
 
 ### Patch Changes

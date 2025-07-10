@@ -47,7 +47,14 @@ const config: Config = {
       },
     },
   },
-
+  markdown: {
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
+  },
+  themes: ['@docusaurus/theme-live-codeblock'],
   presets: [
     [
       'classic',
@@ -157,6 +164,10 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+    tableOfContents: {
+      minHeadingLevel: 2, // 默认
+      maxHeadingLevel: 5, // 默认是3，改为4以显示四级标题
     },
   } satisfies Preset.ThemeConfig,
 };

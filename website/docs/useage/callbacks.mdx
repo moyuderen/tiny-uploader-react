@@ -1,0 +1,228 @@
+---
+sidebar_position: 1
+title: 事件
+---
+
+## onClick
+**说明** 点击文件触发
+
+**类型** `(file: FileContext) => void`
+
+```ts
+const onClick = (file: FileContext) => {
+  console.log(file)
+}
+```
+
+## onChange
+
+**说明** 文件状态改变时触发
+
+**类型** `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onChange = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onExceed
+**说明** 超出文件数量限制时触发
+
+**类型** `(slectedFiles: FileContext[], fileList: FileContext[]) => void`
+
+```ts
+const onExceed = (slectedFiles: FileContext[], fileList: FileContext[]) => {
+  console.log(slectedFiles, fileList)
+}
+```
+
+## onFileAdded
+**说明** 文件添加时触发
+
+**类型** `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onFileAdded = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onFilesAdded
+**说明** 所有文件添加完成时触发
+
+**类型** `(fileList: FileContext[]) => void`
+
+```ts
+const onFilesAdded = (fileList: FileContext[]) => {
+  console.log(fileList)
+}
+```
+
+## onRemoved
+**说明** 文件移除时触发
+
+**类型** `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onRemoved = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onProgress
+**说明** 文件上传进度改变时触发
+
+**类型** `(file: FileContext, fileList: FileContext[], progress: number) => void`
+
+```ts
+const onProgress = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file.progress, fileList)
+}
+```
+
+## onUploaded
+**说明** 文件所有chunk上传完成时触发
+
+**类型** `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onUploaded = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onSuccess
+**说明** 文件上传成功时, 且文件合并完成时触发
+
+**类型** `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onSuccess = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onFail
+**说明** 文件上传失败时触发, 包括添加失败，上传失败，合并失败
+
+**类型** `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onFail = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onAllFilesSuccess
+**说明** 所有文件上传成功时触发
+
+**类型** `(fileList: FileContext[]) => void`
+
+```ts
+const onAllFilesSuccess = (fileList: FileContext[]) => {
+  console.log(fileList)
+}
+```
+
+## 示例
+
+```tsx live
+function Example() {
+  const [defaultFileList, setDefaultFileList] = useState<DefaultFile[]>([])
+  const baseUrl = 'https://tiny-uploader-server.vercel.app/file'
+
+  const onPreview = (file: FileContext) => {
+    console.log('onPreview', file.name, file.url)
+  }
+
+  const onChange = (file: FileContext) => console.log('onChange', file.status)
+
+  const onExceed = (slectedFiles: FileContext[], fileList: FileContext[]) => {
+    console.log('onExceed', slectedFiles, fileList)
+  }
+
+  const onFileAdded = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onFileAdded', file.name, fileList)
+  }
+
+  const onFilesAdded = (fileList: FileContext[]) => {
+    console.log('onFilesAdded', fileList)
+  }
+
+  const onRemoved = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onRemoved', file.name, fileList)
+  }
+
+  const onProgress = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onProgress', file.name, file.progress, fileList)
+  }
+
+  const onUploaded = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onUploaded', file.name, fileList)
+  }
+
+  const onSuccess = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onSuccess', file.name, fileList)
+  }
+
+  const onFail = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onFail', file.name, fileList)
+  }
+
+  const onAllFilesSuccess = (fileList: FileContext[]) => {
+    console.log('onAllFilesSuccess', fileList)
+  }
+
+  return (
+    <>
+      <Uploader
+        defaultFileList={[
+          {
+            id: 1,
+            name: 'default.png',
+            url: 'https://baidu.com'
+          }
+        ]}
+        options={{
+          action: `${baseUrl}/upload`,
+          limit: 3,
+          async checkRequest(file: FileContext) {
+            const params = new URLSearchParams({
+              filename: file.name,
+              hash: file.hash,
+              status: 'none'
+            }).toString()
+            const response = await fetch(`${baseUrl}/check?${params}`)
+            const { data } = await response.json()
+            return data
+          },
+          async mergeRequest(file: FileContext) {
+            const params = new URLSearchParams({
+              filename: file.name,
+              hash: file.hash
+            }).toString()
+            const response = await fetch(`${baseUrl}/merge?${params}`)
+            const { data } = await response.json()
+            return data
+          }
+        }}
+        onClick={onPreview}
+        onChange={onChange}
+        onExceed={onExceed}
+        onFileAdded={onFileAdded}
+        onFilesAdded={onFilesAdded}
+        onRemoved={onRemoved}
+        onProgress={onProgress}
+        onUploaded={onUploaded}
+        onSuccess={onSuccess}
+        onFail={onFail}
+        onAllFilesSuccess={onAllFilesSuccess}
+      ></Uploader>
+    </>
+  )
+}
+```
+
+
+

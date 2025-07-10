@@ -2,46 +2,60 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro zh-CN
+# 快速上手
 
-Let's discover **Docusaurus in less than 5 minutes**.
 
-## Getting Started
-
-Get started by **creating a new site**.
-
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
+## 安装
 
 ```bash
-npm init docusaurus@latest my-website classic
+npm install tiny-uploader-react
 ```
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+## 使用
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import { Uploader, type DefaultFile, type UploaderHandle } from '@tinyuploader/react'
+import '@tinyuploader/react/style.css'
 
-## Start your site
+const BASE_URL = 'https://tiny-uploader-server.vercel.app/file';
 
-Run the development server:
+function App() {
+  const uploader = useRef<UploaderHandle>(null);
+  const [defaultFileList, setDefaultFileList] = useState<DefaultFile[]>([]);
 
-```bash
-cd my-website
-npm run start
+  useEffect(() => {
+    setTimeout(() => {
+      setDefaultFileList([
+        {
+          id: 1,
+          name: 'default.png',
+          url: 'https://baidu.com',
+        },
+      ]);
+    }, 500);
+  }, []);
+  return (
+    <div className="uploader">
+      <Uploader
+        ref={uploader}
+        defaultFileList={defaultFileList}
+        options={{
+          drag: true,
+          action: `${BASE_URL}/upload`,
+        }}
+      ></Uploader>
+    </div>
+  );
+}
+
+export default App;
 ```
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+## 示例
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+- [Stackblitz示例](https://stackblitz.com/edit/vitejs-vite-mwsxbxzg?file=src%2FApp.tsx)
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+## [接口文档](https://moyuderen.github.io/tiny-uploader-server/en/)
+
+

@@ -1,0 +1,78 @@
+---
+sidebar_position: 1
+title: 方法
+---
+
+## clear
+
+- **说明** 清除上传列表，如果有正在上传的文件则取消上传后删除
+- **类型** `() => void`
+
+```tsx live
+
+function DefaultFileListExample(params) {
+  const uploaderRef = useRef<UploaderRef>(null);
+
+  const defaultFileList = [{
+    id: 1,
+    name: 'default.jpg',
+    url: 'https://baidu.com',
+  }]
+
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  const clear = () => {
+    uploaderRef.current?.clear();
+  }
+
+  return (
+    <>
+      <button onClick={clear}>Clear files</button>
+
+      <Uploader 
+        ref={uploaderRef}
+        defaultFileList={defaultFileList}
+        options={options}
+      />
+    </br>
+  )
+}
+```
+
+## submit
+
+- **说明** 手动提交上传列表
+- **类型** `() => void`
+- **示例**
+```tsx live 
+function SubmitExample(params) {
+  const uploaderRef = useRef<UploaderRef>(null);
+
+  const defaultFileList = [{
+    id: 1,
+    name: 'default.jpg',
+    url: 'https://baidu.com',
+  }]
+
+  const submit = () => {
+    uploaderRef.current?.submit();
+  }
+
+  return (
+    <>
+      <button onClick={submit}>Submit files</button>
+
+      <Uploader 
+        ref={uploaderRef}
+        defaultFileList={defaultFileList}
+        options={{
+          autoUpload: false,
+          action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        }}
+      />
+    </br>
+  )
+}
+```

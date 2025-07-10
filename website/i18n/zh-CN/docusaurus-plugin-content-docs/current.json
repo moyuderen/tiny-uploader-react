@@ -14,5 +14,13 @@
   "sidebar.tutorialSidebar.category.Tutorial - Extras": {
     "message": "Tutorial - Extras",
     "description": "The label for category Tutorial - Extras in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.props": {
+    "message": "使用方式",
+    "description": "The label for category props in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Other": {
+    "message": "其他",
+    "description": "The label for category Other in sidebar tutorialSidebar"
   }
 }

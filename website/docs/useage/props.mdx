@@ -1,0 +1,281 @@
+---
+sidebar_position: 1
+title: 基础属性
+---
+
+## defaultFileList
+
+- **说明** 默认文件列表
+
+- **类型** [`UserFile[]`](../other/interface#user-file)
+
+- **默认值**`[]`
+
+```tsx live
+function DefaultFileListExample(params) {
+  const defaultFileList = [{
+    id: 1,
+    name: 'default.jpg',
+    url: 'https://baidu.com',
+  }]
+
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader 
+      defaultFileList={defaultFileList}
+      options={options}
+    />
+  )
+}
+```
+
+## options
+
+- **说明** 参数配置
+
+- **类型** [`UploaderOptions`](../other/interface#uploader-options)
+
+- **默认值**
+
+```ts
+const defaultOptions: UploaderOptions = {
+  // input 属性相关
+  accept: '*',
+  multiple: true,
+  // 文件相关
+  limit: 10,
+  autoUpload: true,
+  customGenerateUid: undefined,
+  beforeAdd: (_file: FileContext) => true,
+  beforeRemove: (_file: FileContext) => true,
+  addFailToRemove: true,
+  chunkSize: 2 * 1024 * 1024, // 2M
+  fakeProgress: true,
+  withHash: true,
+  useWebWoker: false,
+  // 上传逻辑相关
+  name: 'file',
+  action: '',
+  customRequest: null,
+  withCredentials: true,
+  headers: {},
+  data: {},
+  requestSucceed: (xhr) => [200, 201, 202, 206].includes(xhr.status),
+  maxConcurrency: 6,
+  maxRetries: 3,
+  retryInterval: 1000,
+  checkRequest: (_file: FileContext) => ({ status: CheckStatus.None }),
+  mergeRequest: (_file: FileContext) => true,
+  processData: (data, _processType) => data
+}
+```
+
+### drag
+
+- **说明** 是否开启拖拽上传
+
+- **类型** `boolean`
+
+- **默认值** `true`
+
+```tsx live
+function BaseExample(params) {
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader options={options} />
+  )
+}
+```
+#### drag 值为`false`时
+
+```tsx live
+function DragFalseExample(params) {
+  return (
+    <Uploader options={{
+        drag: false,
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+      }} 
+    />
+  )
+}
+```
+
+#### 自定义上传触发节点
+
+##### drag为false
+
+```tsx live
+function Example(params) {
+  return (
+    <Uploader options={{
+        drag: false,
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+      }} 
+    >
+      <button>Click me !!!</button>
+    </Uploader>
+  )
+}
+```
+
+##### drag为true
+
+```tsx live
+<Uploader options={{
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }} 
+>
+  <UploadIcon size={64} style={{ transform: 'scale(0.65)' }} />
+  <div className="tiny-uploader-drop_text">
+    Drop file here or <em>click to upload</em>
+  </div>
+  <div className="tiny-uploader-drop_hint">Support for a single or bulk upload.</div>
+</Uploader>
+```
+
+## tipRender
+
+- **说明** 自定义提示内容
+
+- **类型** `null | () => ReactNode`
+
+- **默认值** `null`
+
+```jsx live
+function TipRenderExample(params) {
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader 
+      options={options} 
+      tipRender={() => (
+        <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
+      )}
+    />
+  )
+}
+```
+
+## accept
+
+- **说明** 接受上传的文件类型
+
+- **类型** `string`
+
+- **默认值** `*`
+
+- **示例-只能上传图片**
+
+```tsx live
+function AcceptExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        accept: 'image/*',
+      }} 
+    />
+  )
+}
+```
+
+## multiple
+
+- **说明** 是否支持多选文件
+
+- **类型** `boolean`
+
+- **默认值** `true`
+
+- **示例-单文件上传**
+
+```tsx live
+function MultipleExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        multiple: false,
+      }} 
+    />
+  )
+}
+```
+
+## limit
+
+- **说明** 最大上传数量，超出会触发[`onExceed`](./callbacks#onexceed)事件
+
+- **类型** `number`
+
+- **默认值** `10`
+
+- **示例-最多上传一个文件**
+
+```tsx live
+function LimitExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        limit: 1,
+      }} 
+    />
+  )
+}
+```
+
+## autoUpload
+
+- **说明** 是否自动上传，触发[`uploader.submit`](./functions#submit)方法可手动上传
+
+- **类型** `boolean`
+
+- **默认值** `true`
+
+- **示例-不自动上传**
+
+```tsx live
+function AutoUploadExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        autoUpload: false,
+      }} 
+    />
+  )
+}
+```
+## customGenerateUid
+- **说明** 自定义生成文件唯一标识，默认使用内置id生成方法, 如果没返回也使用内置id生成方法,
+
+- **类型** `(file: FileContext) => void`
+
+- **示例-自定义生成文件唯一标识**
+
+```tsx live
+function CustomGenerateUidExample(params) {
+  let uid = 0
+
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        customGenerateUid: (file) => console.log(file.name),
+      }} 
+      onClick={(file) => {
+        console.log(file.uid)
+      }}
+    />
+  )
+}
+```

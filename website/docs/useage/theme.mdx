@@ -1,0 +1,43 @@
+---
+sidebar_position: 1
+title: 主题
+---
+
+import Uploader from '@site/src/components/Uploader';
+
+## 默认主题
+
+```css
+--tiny-color-primary: #409eff;
+```
+
+<Uploader options={{
+  action: 'https://tiny-uploader-server.vercel.app/file/upload'
+}}/>
+
+
+## 自定义主题色
+
+<div style={{'--tiny-color-primary': '#1dce9f'}}>
+  <Uploader options={{
+    action: 'https://tiny-uploader-server.vercel.app/file/upload'
+  }}/>
+</div>
+
+```tsx
+<div style={{'--tiny-color-primary': '#1dce9f'}}>
+  <Uploader />
+</div>
+```
+或者使用作用域css变量覆盖全局变量
+
+```tsx
+<div className="demo">
+  <Uploader/>
+</div>
+```
+```css
+.demo {
+  --tiny-color-primary: #1dce9f;
+}
+```
