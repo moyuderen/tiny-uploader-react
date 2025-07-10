@@ -30,7 +30,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Other',
       collapsed: false,
-      items: ['other/instance', 'other/interface', 'other/enum'],
+      items: ['other/interface', 'other/enum'],
     },
   ],
 };

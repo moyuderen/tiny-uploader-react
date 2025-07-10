@@ -270,12 +270,393 @@ function CustomGenerateUidExample(params) {
     <Uploader 
       options={{
         action: 'https://tiny-uploader-server.vercel.app/file/upload',
-        customGenerateUid: (file) => console.log(file.name),
+        customGenerateUid: (file) => `${file.name}-${uid++}`,
       }} 
-      onClick={(file) => {
-        console.log(file.uid)
-      }}
+      onClick={(file) => console.log(file.uid)}
     />
   )
 }
 ```
+
+## beforeAdd
+
+- **说明** 所有上传动作开始上传前的钩子, 返回false 或者 返回 Promise 且被 reject 则停止上传，参数是 file， 停止后会从fileList中删除，并且触发Callbacks.FileRemove回调
+
+- **类型** `(file: FileContext) => Promise<boolean | any> | boolean | any;`
+
+- **默认值** `() => true`
+
+- **示例-校验文件大小**
+
+```tsx live
+function BeforeAddExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        beforeAdd: (file) => {
+          if (file.size > 1024 * 1024 * 10) {
+            console.log('文件大小不能超过10MB')
+            return Promise.reject('文件大小不能超过10MB')
+          }
+        }
+      }} 
+    />
+  )
+}
+```
+## beforeRemove
+
+- **说明** 所有上传动作开始移除前的钩子, 返回false 或者 返回 Promise 且被 reject 则不移除，参数是 file，移除后会从fileList中删除，并且触发Callbacks.FileRemove回调
+
+- **类型** `(file: FileContext) => Promise<boolean | any> | boolean | any;`
+
+- **默认值** `() => true`
+
+- **示例-校验文件大小**
+
+```tsx live
+function BeforeRemoveExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        beforeRemove: (file) => {
+          console.log('beforeRemove', file)
+          return false
+        }
+      }} 
+    />
+  )
+}
+```
+
+## addFailToRemove
+
+- **说明** 上传失败后是否自动移除文件
+
+- **类型** `boolean`
+
+- **默认值** `true`
+
+## chunkSize
+
+- **说明** 分片上传的分片大小
+
+- **类型** `number`
+
+- **默认值** `1024 * 1024 * 2`
+
+## fakeProgress
+
+- **说明** 是否展示上传的最大进度值（解决进度条的回退现象）。为false时,因为在某个 chunk 上传失败后，chunk 进度会变为 0，文件的进度因此会有回退抖动现象
+
+- **类型** `boolean`
+
+- **默认值** `false`
+
+## withHash
+
+- **说明** 是否开启通过spark-md5生成文件的hash计算
+
+- **类型** `boolean`
+
+- **默认值** `true`
+
+## useWebWoker
+
+- **说明** 计算文件hash值时使用Web Workers计算，为false时在 js 线程中计算
+
+- **类型** `boolean`
+
+- **默认值** `false`
+
+:::danger
+如果要开启`useWebWoker`，需要安装使用`hashion`的`SparkWorker`插件
+:::
+
+## name
+
+上传二进制文件数据，参数名称
+
+- **类型** `string`
+- **默认值** `file`
+
+## action
+
+上传文件的接口地址
+
+- **类型** `string`
+
+- **默认值** `''`
+
+## [withCredentials](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/withCredentials)
+
+**类型** `boolean`
+
+**默认值** `true`
+
+## headers
+
+上传接口携带自定义 headers
+
+**类型** `object | Function`
+
+**默认值** `{}`
+
+## data
+
+上传接口携带自定义参数
+
+**类型** `object | Function`
+
+**默认值** `{}`
+
+## processData
+
+处理自定义的data参数
+
+**类型** `Function`
+
+**默认值** `(data, processType: ProcessType) => data`, [ProcessType](../other/enum#process-type)
+
+## maxRetries
+
+上传中 chunk 上传失败时的重试次数
+
+**类型** `number`
+
+**默认值** `3`
+
+## retryInterval
+
+上传中 chunk 上传失败时的重试的间隔时间，单位是`ms`
+
+**类型** `number`
+
+**默认值** `1000`
+
+## maxConcurrency
+
+上传中 chunk 最大并发数，防止过多请求
+
+**类型** `number`
+
+**默认值** `6`
+
+## requestSucceed
+
+校验是否上传成功，根据接口定义，通过 http 的 `status` 或者 `code` 判断，参数是`xhr` 对象
+
+**类型** `(xhr: any) => boolean`
+
+**默认值**
+
+```js
+const requestSucceed = (xhr) => {
+  return [200, 201, 202].includes(xhr.status)
+}
+```
+
+:::note
+xhr 属性参考 -> [XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)
+:::
+
+**示例**
+
+```tsx live
+function RequestSucceedExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        requestSucceed: (xhr) => {
+          const { code } = xhr.response
+          return code === '00000' // 代码接口成功
+        }
+      }} 
+    />
+  )
+}
+```
+
+## checkRequest
+
+校验文件，秒传，断点续传。使用时保证`withHash`开启，因为校验时会用到 hash 去后端校验。参数是 [`file`](../other/instance#file-context)
+
+**类型** [`CheckRequest`](../other/interface#check-request)
+
+**默认值**
+
+```tsx live
+function CheckRequestExample(params) {
+  const baseUrl = 'https://tiny-uploader-server.vercel.app/file'
+
+  return (
+    <Uploader 
+      options={{
+        action: `${baseUrl}/upload`,
+        async checkRequest(file: FileContext) {
+          const params = new URLSearchParams({
+            filename: file.name,
+            hash: file.hash,
+            status: 'none'
+          }).toString()
+          const response = await fetch(`${baseUrl}/check?${params}`)
+          const { data } = await response.json()
+          return data
+        },
+      }} 
+    />
+  )
+}
+```
+
+:::note
+[CheckStatus](../other/enum#check-status)
+:::
+
+**示例**
+
+```js {15,22-25,32-35}
+const CheckStatus = {
+  Part: 'part', // 部分上传成功
+  WaitMerge: 'waitMerge', // 准备合并
+  Success: 'success', // 全部上传成功
+  None: 'none' // 没有上传
+}
+
+const checkFileApi = (hash) => {
+  // ...
+}
+
+// 情况一；默认不校验
+async checkRequest(file, query, headers) {
+  const hash = file.hash
+  const { data } = await checkFileApi(hash)
+  return { status: CheckStatus.None }
+}
+
+// 情况二；根据文件hash,文件已经上传
+async checkRequest(file, query, headers) {
+  const hash = file.hash
+  const { data } = await checkFileApi(hash)
+  return {
+    status: CheckStatus.Success,
+    data: 'http://baidu.com' // data是一个上传成功文件的url地址
+  }
+}
+
+// 情况三；根据文件hash,文件部分上传成功
+async checkRequest(file, query, headers) {
+  const hash = file.hash
+  const { data } = await checkFileApi(hash)
+  return {
+    status: CheckStatus.Part,
+    data: [0, 2, 4, 6, 8, 10] // data是已经上传成功chunk的chunkIndex
+  }
+}
+
+<Uploader options={{
+  action: `${baseUrl}/upload`,
+  checkRequest
+}} />
+
+```
+
+## mergeRequest
+
+所有 chunk 上传成功之后调用的 merge 通知后端合并文件的函数, 参数 file，一般后端会返回一个文件的 obs 地址。 返回`false` 或者 返回 `Promise` 且被 `reject`则合并失败
+
+**类型** [`MergeRequest`](../other/interface#merge-request)
+
+**默认值** `const mergeRequest = (file) => true`
+
+**示例**
+
+```tsx live
+function MergeRequestExample(params) {
+  const baseUrl = 'https://tiny-uploader-server.vercel.app/file'
+
+  return (
+    <Uploader 
+      options={{
+        action: `${baseUrl}/upload`,
+        mergeRequest: async (file, query, headers) => {
+          const params = new URLSearchParams({
+            filename: file.name,
+            hash: file.hash
+          }).toString()
+          const response = await fetch(`${baseUrl}/merge?${params}`)
+          const { data } = await response.json()
+          return data
+        },
+      }} 
+    />
+  )
+}
+```
+
+## customRequest
+
+自定义上传接口, 默认为null,使用内置的[request](../other/interface#request)请求
+
+**类型** `null | Request`
+
+**默认值** `null`
+
+:::warning
+如果自定义customRequest, 需要返回一个`abort`方法来取消请求
+:::
+
+**示例** [RequestOptions](../other/interface.md#request)
+
+```ts
+const customRequest = (options: RequestOptions) => {
+  const { action, data, query, headers, name, withCredentials, onSuccess, onFail, onProgress } =
+    options
+  const realData = {
+    fileHashCode: data.hash,
+    uploadId: data.fileId,
+    chunkNumber: data.index + 1,
+    chunkSize: data.size,
+    totalChunks: data.totalChunks,
+    [name]: data[name],
+    hash: data.hash,
+    filename: data.filename,
+    index: data.index,
+    ...query
+  }
+  const formData = new FormData()
+
+  Object.keys(realData).forEach((key) => {
+    formData.append(key, realData[key])
+  })
+  const CancelToken = axios.CancelToken
+  const source = CancelToken.source()
+
+  axios({
+    url: `${BASE_URL}/upload`,
+    method: 'POST',
+    data: formData,
+    headers: headers,
+    cancelToken: source.token,
+    withCredentials: withCredentials,
+    onUploadProgress: onProgress
+  })
+    .then((response) => {
+      onSuccess(action, response)
+    })
+    .catch((e) => {
+      onFail(e)
+    })
+
+  return {
+    abort() {
+      source.cancel('Operation canceled by the user.')
+    }
+  }
+}
+```
+
+
