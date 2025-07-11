@@ -30,6 +30,29 @@ function DefaultFileListExample(params) {
 }
 ```
 
+## tipRender
+
+- **Description**: Custom prompt content
+- **Type**: `null | () => ReactNode`
+- **Default Value**: `null`
+
+```jsx live
+function TipRenderExample(params) {
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader 
+      options={options} 
+      tipRender={() => (
+        <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
+      )}
+    />
+  )
+}
+```
+
 ## options
 
 - **Description**: Configuration parameters
@@ -134,30 +157,7 @@ function Example(params) {
 </Uploader>
 ```
 
-## tipRender
-
-- **Description**: Custom prompt content
-- **Type**: `null | () => ReactNode`
-- **Default Value**: `null`
-
-```jsx live
-function TipRenderExample(params) {
-  const options = {
-    action: 'https://tiny-uploader-server.vercel.app/file/upload',
-  }
-
-  return (
-    <Uploader 
-      options={options} 
-      tipRender={() => (
-        <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
-      )}
-    />
-  )
-}
-```
-
-## accept
+### accept
 
 - **Description**: Accepted file types for upload
 - **Type**: `string`
@@ -177,7 +177,7 @@ function AcceptExample(params) {
 }
 ```
 
-## multiple
+### multiple
 
 - **Description**: Allow multiple file selection
 - **Type**: `boolean`
@@ -197,7 +197,7 @@ function MultipleExample(params) {
 }
 ```
 
-## limit
+### limit
 
 - **Description**: Maximum number of uploads, exceeding this triggers the [`onExceed`](./callbacks#onexceed) event
 - **Type**: `number`
@@ -217,7 +217,7 @@ function LimitExample(params) {
 }
 ```
 
-## autoUpload
+### autoUpload
 
 - **Description**: Enable automatic upload; manual upload can be triggered via [`uploader.submit`](./functions#submit)
 - **Type**: `boolean`
@@ -237,7 +237,7 @@ function AutoUploadExample(params) {
 }
 ```
 
-## customGenerateUid
+### customGenerateUid
 
 - **Description**: Custom file unique identifier generation; defaults to built-in ID generation if not provided or returns undefined
 - **Type**: `(file: FileContext) => void`
@@ -259,7 +259,7 @@ function CustomGenerateUidExample(params) {
 }
 ```
 
-## beforeAdd
+### beforeAdd
 
 - **Description**: Hook before any upload action starts; returning `false` or a rejected `Promise` stops the upload. The parameter is `file`. If stopped, the file is removed from `fileList` and triggers the `Callbacks.FileRemove` callback.
 - **Type**: `(file: FileContext) => Promise<boolean | any> | boolean | any`
@@ -284,7 +284,7 @@ function BeforeAddExample(params) {
 }
 ```
 
-## beforeRemove
+### beforeRemove
 
 - **Description**: Hook before any file removal action; returning `false` or a rejected `Promise` prevents removal. The parameter is `file`. If removed, the file is deleted from `fileList` and triggers the `Callbacks.FileRemove` callback.
 - **Type**: `(file: FileContext) => Promise<boolean | any> | boolean | any`
@@ -307,31 +307,31 @@ function BeforeRemoveExample(params) {
 }
 ```
 
-## addFailToRemove
+### addFailToRemove
 
 - **Description**: Automatically remove files after upload failure
 - **Type**: `boolean`
 - **Default Value**: `true`
 
-## chunkSize
+### chunkSize
 
 - **Description**: Chunk size for chunked uploads
 - **Type**: `number`
 - **Default Value**: `1024 * 1024 * 2`
 
-## fakeProgress
+### fakeProgress
 
 - **Description**: Display maximum upload progress to prevent progress bar rollback. When `false`, if a chunk fails, its progress resets to 0, causing file progress to fluctuate.
 - **Type**: `boolean`
 - **Default Value**: `false`
 
-## withHash
+### withHash
 
 - **Description**: Enable file hash calculation using spark-md5
 - **Type**: `boolean`
 - **Default Value**: `true`
 
-## useWebWoker
+### useWebWoker
 
 - **Description**: Use Web Workers for file hash calculation; when `false`, calculates in the main JS thread
 - **Type**: `boolean`
@@ -341,68 +341,68 @@ function BeforeRemoveExample(params) {
 To enable `useWebWoker`, you need to install and use the `SparkWorker` plugin from `hashion`.
 :::
 
-## name
+### name
 
 Parameter name for uploading binary file data
 
 - **Type**: `string`
 - **Default Value**: `file`
 
-## action
+### action
 
 Upload API endpoint address
 
 - **Type**: `string`
 - **Default Value**: `''`
 
-## [withCredentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)
+### [withCredentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)
 
 - **Type**: `boolean`
 - **Default Value**: `true`
 
-## headers
+### headers
 
 Custom headers for the upload API
 
 - **Type**: `object | Function`
 - **Default Value**: `{}`
 
-## data
+### data
 
 Custom parameters for the upload API
 
 - **Type**: `object | Function`
 - **Default Value**: `{}`
 
-## processData
+### processData
 
 Process custom `data` parameters
 
 - **Type**: `Function`
 - **Default Value**: `(data, processType: ProcessType) => data`, [ProcessType](../other/enum#process-type)
 
-## maxRetries
+### maxRetries
 
 Number of retries for failed chunk uploads
 
 - **Type**: `number`
 - **Default Value**: `3`
 
-## retryInterval
+### retryInterval
 
 Interval time for retrying failed chunk uploads, in milliseconds
 
 - **Type**: `number`
 - **Default Value**: `1000`
 
-## maxConcurrency
+### maxConcurrency
 
 Maximum concurrent chunk uploads to prevent excessive requests
 
 - **Type**: `number`
 - **Default Value**: `6`
 
-## requestSucceed
+### requestSucceed
 
 Validate upload success based on API response, using HTTP `status` or `code`. The parameter is the `xhr` object.
 
@@ -437,7 +437,7 @@ function RequestSucceedExample(params) {
 }
 ```
 
-## checkRequest
+### checkRequest
 
 Check file status for instant upload or resumable upload. Ensure `withHash` is enabled, as the hash is used for backend validation. The parameter is [`file`](../other/interface#file-context).
 
@@ -519,7 +519,7 @@ async checkRequest(file, query, headers) {
 }} />
 ```
 
-## mergeRequest
+### mergeRequest
 
 Function to notify the backend to merge chunks after all chunks are uploaded successfully. The parameter is `file`. Typically, the backend returns the file's OBS address. Returning `false` or a rejected `Promise` indicates merge failure.
 
@@ -550,7 +550,7 @@ function MergeRequestExample(params) {
 }
 ```
 
-## customRequest
+### customRequest
 
 Custom upload API, defaults to `null` and uses the built-in [request](../other/interface#request).
 

@@ -32,6 +32,31 @@ function DefaultFileListExample(params) {
 }
 ```
 
+## tipRender
+
+- **说明** 自定义提示内容
+
+- **类型** `null | () => ReactNode`
+
+- **默认值** `null`
+
+```jsx live
+function TipRenderExample(params) {
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader 
+      options={options} 
+      tipRender={() => (
+        <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
+      )}
+    />
+  )
+}
+```
+
 ## options
 
 - **说明** 参数配置
@@ -138,33 +163,7 @@ function Example(params) {
   <div className="tiny-uploader-drop_hint">Support for a single or bulk upload.</div>
 </Uploader>
 ```
-
-## tipRender
-
-- **说明** 自定义提示内容
-
-- **类型** `null | () => ReactNode`
-
-- **默认值** `null`
-
-```jsx live
-function TipRenderExample(params) {
-  const options = {
-    action: 'https://tiny-uploader-server.vercel.app/file/upload',
-  }
-
-  return (
-    <Uploader 
-      options={options} 
-      tipRender={() => (
-        <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
-      )}
-    />
-  )
-}
-```
-
-## accept
+### accept
 
 - **说明** 接受上传的文件类型
 
@@ -187,7 +186,7 @@ function AcceptExample(params) {
 }
 ```
 
-## multiple
+### multiple
 
 - **说明** 是否支持多选文件
 
@@ -210,7 +209,7 @@ function MultipleExample(params) {
 }
 ```
 
-## limit
+### limit
 
 - **说明** 最大上传数量，超出会触发[`onExceed`](./callbacks#onexceed)事件
 
@@ -233,7 +232,7 @@ function LimitExample(params) {
 }
 ```
 
-## autoUpload
+### autoUpload
 
 - **说明** 是否自动上传，触发[`uploader.submit`](./functions#submit)方法可手动上传
 
@@ -255,7 +254,7 @@ function AutoUploadExample(params) {
   )
 }
 ```
-## customGenerateUid
+### customGenerateUid
 - **说明** 自定义生成文件唯一标识，默认使用内置id生成方法, 如果没返回也使用内置id生成方法,
 
 - **类型** `(file: FileContext) => void`
@@ -278,7 +277,7 @@ function CustomGenerateUidExample(params) {
 }
 ```
 
-## beforeAdd
+### beforeAdd
 
 - **说明** 所有上传动作开始上传前的钩子, 返回false 或者 返回 Promise 且被 reject 则停止上传，参数是 file， 停止后会从fileList中删除，并且触发Callbacks.FileRemove回调
 
@@ -305,7 +304,7 @@ function BeforeAddExample(params) {
   )
 }
 ```
-## beforeRemove
+### beforeRemove
 
 - **说明** 所有上传动作开始移除前的钩子, 返回false 或者 返回 Promise 且被 reject 则不移除，参数是 file，移除后会从fileList中删除，并且触发Callbacks.FileRemove回调
 
@@ -331,7 +330,7 @@ function BeforeRemoveExample(params) {
 }
 ```
 
-## addFailToRemove
+### addFailToRemove
 
 - **说明** 上传失败后是否自动移除文件
 
@@ -339,7 +338,7 @@ function BeforeRemoveExample(params) {
 
 - **默认值** `true`
 
-## chunkSize
+### chunkSize
 
 - **说明** 分片上传的分片大小
 
@@ -347,7 +346,7 @@ function BeforeRemoveExample(params) {
 
 - **默认值** `1024 * 1024 * 2`
 
-## fakeProgress
+### fakeProgress
 
 - **说明** 是否展示上传的最大进度值（解决进度条的回退现象）。为false时,因为在某个 chunk 上传失败后，chunk 进度会变为 0，文件的进度因此会有回退抖动现象
 
@@ -355,7 +354,7 @@ function BeforeRemoveExample(params) {
 
 - **默认值** `false`
 
-## withHash
+### withHash
 
 - **说明** 是否开启通过spark-md5生成文件的hash计算
 
@@ -363,7 +362,7 @@ function BeforeRemoveExample(params) {
 
 - **默认值** `true`
 
-## useWebWoker
+### useWebWoker
 
 - **说明** 计算文件hash值时使用Web Workers计算，为false时在 js 线程中计算
 
@@ -375,14 +374,14 @@ function BeforeRemoveExample(params) {
 如果要开启`useWebWoker`，需要安装使用`hashion`的`SparkWorker`插件
 :::
 
-## name
+### name
 
 上传二进制文件数据，参数名称
 
 - **类型** `string`
 - **默认值** `file`
 
-## action
+### action
 
 上传文件的接口地址
 
@@ -390,13 +389,13 @@ function BeforeRemoveExample(params) {
 
 - **默认值** `''`
 
-## [withCredentials](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/withCredentials)
+### [withCredentials](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/withCredentials)
 
 **类型** `boolean`
 
 **默认值** `true`
 
-## headers
+### headers
 
 上传接口携带自定义 headers
 
@@ -404,7 +403,7 @@ function BeforeRemoveExample(params) {
 
 **默认值** `{}`
 
-## data
+### data
 
 上传接口携带自定义参数
 
@@ -412,7 +411,7 @@ function BeforeRemoveExample(params) {
 
 **默认值** `{}`
 
-## processData
+### processData
 
 处理自定义的data参数
 
@@ -420,7 +419,7 @@ function BeforeRemoveExample(params) {
 
 **默认值** `(data, processType: ProcessType) => data`, [ProcessType](../other/enum#process-type)
 
-## maxRetries
+### maxRetries
 
 上传中 chunk 上传失败时的重试次数
 
@@ -428,7 +427,7 @@ function BeforeRemoveExample(params) {
 
 **默认值** `3`
 
-## retryInterval
+### retryInterval
 
 上传中 chunk 上传失败时的重试的间隔时间，单位是`ms`
 
@@ -436,7 +435,7 @@ function BeforeRemoveExample(params) {
 
 **默认值** `1000`
 
-## maxConcurrency
+### maxConcurrency
 
 上传中 chunk 最大并发数，防止过多请求
 
@@ -444,7 +443,7 @@ function BeforeRemoveExample(params) {
 
 **默认值** `6`
 
-## requestSucceed
+### requestSucceed
 
 校验是否上传成功，根据接口定义，通过 http 的 `status` 或者 `code` 判断，参数是`xhr` 对象
 
@@ -480,7 +479,7 @@ function RequestSucceedExample(params) {
 }
 ```
 
-## checkRequest
+### checkRequest
 
 校验文件，秒传，断点续传。使用时保证`withHash`开启，因为校验时会用到 hash 去后端校验。参数是 [`file`](../other/interface#file-context)
 
@@ -564,7 +563,7 @@ async checkRequest(file, query, headers) {
 
 ```
 
-## mergeRequest
+### mergeRequest
 
 所有 chunk 上传成功之后调用的 merge 通知后端合并文件的函数, 参数 file，一般后端会返回一个文件的 obs 地址。 返回`false` 或者 返回 `Promise` 且被 `reject`则合并失败
 
@@ -597,7 +596,7 @@ function MergeRequestExample(params) {
 }
 ```
 
-## customRequest
+### customRequest
 
 自定义上传接口, 默认为null,使用内置的[request](../other/interface#request)请求
 
@@ -658,5 +657,7 @@ const customRequest = (options: RequestOptions) => {
   }
 }
 ```
+
+
 
 
