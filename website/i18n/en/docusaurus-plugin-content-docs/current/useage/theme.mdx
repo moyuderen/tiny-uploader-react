@@ -1,0 +1,44 @@
+---
+sidebar_position: 1
+title: Theme
+---
+
+import Uploader from '@site/src/components/Uploader';
+
+## Default Theme
+
+```css
+--tiny-color-primary: #409eff;
+```
+
+<Uploader options={{
+  action: 'https://tiny-uploader-server.vercel.app/file/upload'
+}}/>
+
+## Custom Theme Color
+
+<div style={{'--tiny-color-primary': '#1dce9f'}}>
+  <Uploader options={{
+    action: 'https://tiny-uploader-server.vercel.app/file/upload'
+  }}/>
+</div>
+
+```tsx
+<div style={{'--tiny-color-primary': '#1dce9f'}}>
+  <Uploader />
+</div>
+```
+
+Or override the global variable using scoped CSS variables:
+
+```tsx
+<div className="demo">
+  <Uploader />
+</div>
+```
+
+```css
+.demo {
+  --tiny-color-primary: #1dce9f;
+}
+```

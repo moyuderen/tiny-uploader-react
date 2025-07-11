@@ -1,0 +1,612 @@
+---
+sidebar_position: 1
+title: Basic Properties
+---
+
+## defaultFileList
+
+- **Description**: Default file list
+- **Type**: [`UserFile[]`](../other/interface#user-file)
+- **Default Value**: `[]`
+
+```tsx live
+function DefaultFileListExample(params) {
+  const defaultFileList = [{
+    id: 1,
+    name: 'default.jpg',
+    url: 'https://baidu.com',
+  }]
+
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader 
+      defaultFileList={defaultFileList}
+      options={options}
+    />
+  )
+}
+```
+
+## options
+
+- **Description**: Configuration parameters
+- **Type**: [`UploaderOptions`](../other/interface#uploader-options)
+- **Default Value**:
+
+```ts
+const defaultOptions: UploaderOptions = {
+  // Input-related properties
+  accept: '*',
+  multiple: true,
+  // File-related properties
+  limit: 10,
+  autoUpload: true,
+  customGenerateUid: undefined,
+  beforeAdd: (_file: FileContext) => true,
+  beforeRemove: (_file: FileContext) => true,
+  addFailToRemove: true,
+  chunkSize: 2 * 1024 * 1024, // 2M
+  fakeProgress: true,
+  withHash: true,
+  useWebWoker: false,
+  // Upload logic-related properties
+  name: 'file',
+  action: '',
+  customRequest: null,
+  withCredentials: true,
+  headers: {},
+  data: {},
+  requestSucceed: (xhr) => [200, 201, 202, 206].includes(xhr.status),
+  maxConcurrency: 6,
+  maxRetries: 3,
+  retryInterval: 1000,
+  checkRequest: (_file: FileContext) => ({ status: CheckStatus.None }),
+  mergeRequest: (_file: FileContext) => true,
+  processData: (data, _processType) => data
+}
+```
+
+### drag
+
+- **Description**: Enable drag-and-drop upload
+- **Type**: `boolean`
+- **Default Value**: `true`
+
+```tsx live
+function BaseExample(params) {
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader options={options} />
+  )
+}
+```
+
+#### When `drag` is set to `false`
+
+```tsx live
+function DragFalseExample(params) {
+  return (
+    <Uploader options={{
+        drag: false,
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+      }} 
+    />
+  )
+}
+```
+
+#### Custom Upload Trigger Node
+
+##### When `drag` is `false`
+
+```tsx live
+function Example(params) {
+  return (
+    <Uploader options={{
+        drag: false,
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+      }} 
+    >
+      <button>Click me !!!</button>
+    </Uploader>
+  )
+}
+```
+
+##### When `drag` is `true`
+
+```tsx live
+<Uploader options={{
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }} 
+>
+  <UploadIcon size={64} style={{ transform: 'scale(0.65)' }} />
+  <div className="tiny-uploader-drop_text">
+    Drop file here or <em>click to upload</em>
+  </div>
+  <div className="tiny-uploader-drop_hint">Support for a single or bulk upload.</div>
+</Uploader>
+```
+
+## tipRender
+
+- **Description**: Custom prompt content
+- **Type**: `null | () => ReactNode`
+- **Default Value**: `null`
+
+```jsx live
+function TipRenderExample(params) {
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  return (
+    <Uploader 
+      options={options} 
+      tipRender={() => (
+        <div className="tiny-uploader-tip">Click or drag files to this area to upload.</div>
+      )}
+    />
+  )
+}
+```
+
+## accept
+
+- **Description**: Accepted file types for upload
+- **Type**: `string`
+- **Default Value**: `*`
+- **Example - Only allow image uploads**
+
+```tsx live
+function AcceptExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        accept: 'image/*',
+      }} 
+    />
+  )
+}
+```
+
+## multiple
+
+- **Description**: Allow multiple file selection
+- **Type**: `boolean`
+- **Default Value**: `true`
+- **Example - Single file upload**
+
+```tsx live
+function MultipleExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        multiple: false,
+      }} 
+    />
+  )
+}
+```
+
+## limit
+
+- **Description**: Maximum number of uploads, exceeding this triggers the [`onExceed`](./callbacks#onexceed) event
+- **Type**: `number`
+- **Default Value**: `10`
+- **Example - Limit to one file**
+
+```tsx live
+function LimitExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        limit: 1,
+      }} 
+    />
+  )
+}
+```
+
+## autoUpload
+
+- **Description**: Enable automatic upload; manual upload can be triggered via [`uploader.submit`](./functions#submit)
+- **Type**: `boolean`
+- **Default Value**: `true`
+- **Example - Disable automatic upload**
+
+```tsx live
+function AutoUploadExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        autoUpload: false,
+      }} 
+    />
+  )
+}
+```
+
+## customGenerateUid
+
+- **Description**: Custom file unique identifier generation; defaults to built-in ID generation if not provided or returns undefined
+- **Type**: `(file: FileContext) => void`
+- **Example - Custom file unique identifier**
+
+```tsx live
+function CustomGenerateUidExample(params) {
+  let uid = 0
+
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        customGenerateUid: (file) => `${file.name}-${uid++}`,
+      }} 
+      onClick={(file) => console.log(file.uid)}
+    />
+  )
+}
+```
+
+## beforeAdd
+
+- **Description**: Hook before any upload action starts; returning `false` or a rejected `Promise` stops the upload. The parameter is `file`. If stopped, the file is removed from `fileList` and triggers the `Callbacks.FileRemove` callback.
+- **Type**: `(file: FileContext) => Promise<boolean | any> | boolean | any`
+- **Default Value**: `() => true`
+- **Example - Validate file size**
+
+```tsx live
+function BeforeAddExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        beforeAdd: (file) => {
+          if (file.size > 1024 * 1024 * 10) {
+            console.log('File size cannot exceed 10MB')
+            return Promise.reject('File size cannot exceed 10MB')
+          }
+        }
+      }} 
+    />
+  )
+}
+```
+
+## beforeRemove
+
+- **Description**: Hook before any file removal action; returning `false` or a rejected `Promise` prevents removal. The parameter is `file`. If removed, the file is deleted from `fileList` and triggers the `Callbacks.FileRemove` callback.
+- **Type**: `(file: FileContext) => Promise<boolean | any> | boolean | any`
+- **Default Value**: `() => true`
+- **Example - Validate file size**
+
+```tsx live
+function BeforeRemoveExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        beforeRemove: (file) => {
+          console.log('beforeRemove', file)
+          return false
+        }
+      }} 
+    />
+  )
+}
+```
+
+## addFailToRemove
+
+- **Description**: Automatically remove files after upload failure
+- **Type**: `boolean`
+- **Default Value**: `true`
+
+## chunkSize
+
+- **Description**: Chunk size for chunked uploads
+- **Type**: `number`
+- **Default Value**: `1024 * 1024 * 2`
+
+## fakeProgress
+
+- **Description**: Display maximum upload progress to prevent progress bar rollback. When `false`, if a chunk fails, its progress resets to 0, causing file progress to fluctuate.
+- **Type**: `boolean`
+- **Default Value**: `false`
+
+## withHash
+
+- **Description**: Enable file hash calculation using spark-md5
+- **Type**: `boolean`
+- **Default Value**: `true`
+
+## useWebWoker
+
+- **Description**: Use Web Workers for file hash calculation; when `false`, calculates in the main JS thread
+- **Type**: `boolean`
+- **Default Value**: `false`
+
+:::danger
+To enable `useWebWoker`, you need to install and use the `SparkWorker` plugin from `hashion`.
+:::
+
+## name
+
+Parameter name for uploading binary file data
+
+- **Type**: `string`
+- **Default Value**: `file`
+
+## action
+
+Upload API endpoint address
+
+- **Type**: `string`
+- **Default Value**: `''`
+
+## [withCredentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)
+
+- **Type**: `boolean`
+- **Default Value**: `true`
+
+## headers
+
+Custom headers for the upload API
+
+- **Type**: `object | Function`
+- **Default Value**: `{}`
+
+## data
+
+Custom parameters for the upload API
+
+- **Type**: `object | Function`
+- **Default Value**: `{}`
+
+## processData
+
+Process custom `data` parameters
+
+- **Type**: `Function`
+- **Default Value**: `(data, processType: ProcessType) => data`, [ProcessType](../other/enum#process-type)
+
+## maxRetries
+
+Number of retries for failed chunk uploads
+
+- **Type**: `number`
+- **Default Value**: `3`
+
+## retryInterval
+
+Interval time for retrying failed chunk uploads, in milliseconds
+
+- **Type**: `number`
+- **Default Value**: `1000`
+
+## maxConcurrency
+
+Maximum concurrent chunk uploads to prevent excessive requests
+
+- **Type**: `number`
+- **Default Value**: `6`
+
+## requestSucceed
+
+Validate upload success based on API response, using HTTP `status` or `code`. The parameter is the `xhr` object.
+
+- **Type**: `(xhr: any) => boolean`
+- **Default Value**:
+
+```js
+const requestSucceed = (xhr) => {
+  return [200, 201, 202].includes(xhr.status)
+}
+```
+
+:::note
+xhr properties reference -> [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
+:::
+
+**Example**
+
+```tsx live
+function RequestSucceedExample(params) {
+  return (
+    <Uploader 
+      options={{
+        action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        requestSucceed: (xhr) => {
+          const { code } = xhr.response
+          return code === '00000' // API success code
+        }
+      }} 
+    />
+  )
+}
+```
+
+## checkRequest
+
+Check file status for instant upload or resumable upload. Ensure `withHash` is enabled, as the hash is used for backend validation. The parameter is [`file`](../other/interface#file-context).
+
+- **Type**: [`CheckRequest`](../other/interface#check-request)
+- **Default Value**:
+
+```tsx live
+function CheckRequestExample(params) {
+  const baseUrl = 'https://tiny-uploader-server.vercel.app/file'
+
+  return (
+    <Uploader 
+      options={{
+        action: `${baseUrl}/upload`,
+        async checkRequest(file: FileContext) {
+          const params = new URLSearchParams({
+            filename: file.name,
+            hash: file.hash,
+            status: 'none'
+          }).toString()
+          const response = await fetch(`${baseUrl}/check?${params}`)
+          const { data } = await response.json()
+          return data
+        },
+      }} 
+    />
+  )
+}
+```
+
+:::note
+[CheckStatus](../other/enum#check-status)
+:::
+
+**Example**
+
+```js {15,22-25,32-35}
+const CheckStatus = {
+  Part: 'part', // Partially uploaded
+  WaitMerge: 'waitMerge', // Ready to merge
+  Success: 'success', // Fully uploaded
+  None: 'none' // Not uploaded
+}
+
+const checkFileApi = (hash) => {
+  // ...
+}
+
+// Case 1: No validation by default
+async checkRequest(file, query, headers) {
+  const hash = file.hash
+  const { data } = await checkFileApi(hash)
+  return { status: CheckStatus.None }
+}
+
+// Case 2: File already uploaded based on hash
+async checkRequest(file, query, headers) {
+  const hash = file.hash
+  const { data } = await checkFileApi(hash)
+  return {
+    status: CheckStatus.Success,
+    data: 'http://baidu.com' // URL of the successfully uploaded file
+  }
+}
+
+// Case 3: File partially uploaded based on hash
+async checkRequest(file, query, headers) {
+  const hash = file.hash
+  const { data } = await checkFileApi(hash)
+  return {
+    status: CheckStatus.Part,
+    data: [0, 2, 4, 6, 8, 10] // Chunk indices of successfully uploaded chunks
+  }
+}
+
+<Uploader options={{
+  action: `${baseUrl}/upload`,
+  checkRequest
+}} />
+```
+
+## mergeRequest
+
+Function to notify the backend to merge chunks after all chunks are uploaded successfully. The parameter is `file`. Typically, the backend returns the file's OBS address. Returning `false` or a rejected `Promise` indicates merge failure.
+
+- **Type**: [`MergeRequest`](../other/interface#merge-request)
+- **Default Value**: `const mergeRequest = (file) => true`
+- **Example**
+
+```tsx live
+function MergeRequestExample(params) {
+  const baseUrl = 'https://tiny-uploader-server.vercel.app/file'
+
+  return (
+    <Uploader 
+      options={{
+        action: `${baseUrl}/upload`,
+        mergeRequest: async (file, query, headers) => {
+          const params = new URLSearchParams({
+            filename: file.name,
+            hash: file.hash
+          }).toString()
+          const response = await fetch(`${baseUrl}/merge?${params}`)
+          const { data } = await response.json()
+          return data
+        },
+      }} 
+    />
+  )
+}
+```
+
+## customRequest
+
+Custom upload API, defaults to `null` and uses the built-in [request](../other/interface#request).
+
+- **Type**: `null | Request`
+- **Default Value**: `null`
+
+:::warning
+If `customRequest` is defined, it must return an `abort` method to cancel the request.
+:::
+
+**Example** [RequestOptions](../other/interface.md#request)
+
+```ts
+const customRequest = (options: RequestOptions) => {
+  const { action, data, query, headers, name, withCredentials, onSuccess, onFail, onProgress } =
+    options
+  const realData = {
+    fileHashCode: data.hash,
+    uploadId: data.fileId,
+    chunkNumber: data.index + 1,
+    chunkSize: data.size,
+    totalChunks: data.totalChunks,
+    [name]: data[name],
+    hash: data.hash,
+    filename: data.filename,
+    index: data.index,
+    ...query
+  }
+  const formData = new FormData()
+
+  Object.keys(realData).forEach((key) => {
+    formData.append(key, realData[key])
+  })
+  const CancelToken = axios.CancelToken
+  const source = CancelToken.source()
+
+  axios({
+    url: `${BASE_URL}/upload`,
+    method: 'POST',
+    data: formData,
+    headers: headers,
+    cancelToken: source.token,
+    withCredentials: withCredentials,
+    onUploadProgress: onProgress
+  })
+    .then((response) => {
+      onSuccess(action, response)
+    })
+    .catch((e) => {
+      onFail(e)
+    })
+
+  return {
+    abort() {
+      source.cancel('Operation canceled by the user.')
+    }
+  }
+}
+```

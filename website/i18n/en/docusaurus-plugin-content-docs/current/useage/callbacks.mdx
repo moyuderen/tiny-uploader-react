@@ -1,0 +1,224 @@
+---
+sidebar_position: 1
+title: Callbacks
+---
+
+## onClick
+
+- **Description**: Triggered when a file is clicked
+- **Type**: `(file: FileContext) => void`
+
+```ts
+const onClick = (file: FileContext) => {
+  console.log(file)
+}
+```
+
+## onChange
+
+- **Description**: Triggered when the file status changes
+- **Type**: `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onChange = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onExceed
+
+- **Description**: Triggered when the file count limit is exceeded
+- **Type**: `(slectedFiles: FileContext[], fileList: FileContext[]) => void`
+
+```ts
+const onExceed = (slectedFiles: FileContext[], fileList: FileContext[]) => {
+  console.log(slectedFiles, fileList)
+}
+```
+
+## onFileAdded
+
+- **Description**: Triggered when a file is added
+- **Type**: `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onFileAdded = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onFilesAdded
+
+- **Description**: Triggered when all files are added
+- **Type**: `(fileList: FileContext[]) => void`
+
+```ts
+const onFilesAdded = (fileList: FileContext[]) => {
+  console.log(fileList)
+}
+```
+
+## onRemoved
+
+- **Description**: Triggered when a file is removed
+- **Type**: `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onRemoved = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onProgress
+
+- **Description**: Triggered when the file upload progress changes
+- **Type**: `(file: FileContext, fileList: FileContext[], progress: number) => void`
+
+```ts
+const onProgress = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file.progress, fileList)
+}
+```
+
+## onUploaded
+
+- **Description**: Triggered when all chunks of a file are uploaded
+- **Type**: `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onUploaded = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onSuccess
+
+- **Description**: Triggered when a file is successfully uploaded and merged
+- **Type**: `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onSuccess = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onFail
+
+- **Description**: Triggered when a file upload fails, including add failure, upload failure, or merge failure
+- **Type**: `(file: FileContext, fileList: FileContext[]) => void`
+
+```ts
+const onFail = (file: FileContext, fileList: FileContext[]) => {
+  console.log(file, fileList)
+}
+```
+
+## onAllFilesSuccess
+
+- **Description**: Triggered when all files are successfully uploaded
+- **Type**: `(fileList: FileContext[]) => void`
+
+```ts
+const onAllFilesSuccess = (fileList: FileContext[]) => {
+  console.log(fileList)
+}
+```
+
+## Example
+
+```tsx live
+function Example() {
+  const [defaultFileList, setDefaultFileList] = useState<DefaultFile[]>([])
+  const baseUrl = 'https://tiny-uploader-server.vercel.app/file'
+
+  const onPreview = (file: FileContext) => {
+    console.log('onPreview', file.name, file.url)
+  }
+
+  const onChange = (file: FileContext) => console.log('onChange', file.status)
+
+  const onExceed = (slectedFiles: FileContext[], fileList: FileContext[]) => {
+    console.log('onExceed', slectedFiles, fileList)
+  }
+
+  const onFileAdded = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onFileAdded', file.name, fileList)
+  }
+
+  const onFilesAdded = (fileList: FileContext[]) => {
+    console.log('onFilesAdded', fileList)
+  }
+
+  const onRemoved = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onRemoved', file.name, fileList)
+  }
+
+  const onProgress = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onProgress', file.name, file.progress, fileList)
+  }
+
+  const onUploaded = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onUploaded', file.name, fileList)
+  }
+
+  const onSuccess = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onSuccess', file.name, fileList)
+  }
+
+  const onFail = (file: FileContext, fileList: FileContext[]) => {
+    console.log('onFail', file.name, fileList)
+  }
+
+  const onAllFilesSuccess = (fileList: FileContext[]) => {
+    console.log('onAllFilesSuccess', fileList)
+  }
+
+  return (
+    <>
+      <Uploader
+        defaultFileList={[
+          {
+            id: 1,
+            name: 'default.png',
+            url: 'https://baidu.com'
+          }
+        ]}
+        options={{
+          action: `${baseUrl}/upload`,
+          limit: 3,
+          async checkRequest(file: FileContext) {
+            const params = new URLSearchParams({
+              filename: file.name,
+              hash: file.hash,
+              status: 'none'
+            }).toString()
+            const response = await fetch(`${baseUrl}/check?${params}`)
+            const { data } = await response.json()
+            return data
+          },
+          async mergeRequest(file: FileContext) {
+            const params = new URLSearchParams({
+              filename: file.name,
+              hash: file.hash
+            }).toString()
+            const response = await fetch(`${baseUrl}/merge?${params}`)
+            const { data } = await response.json()
+            return data
+          }
+        }}
+        onClick={onPreview}
+        onChange={onChange}
+        onExceed={onExceed}
+        onFileAdded={onFileAdded}
+        onFilesAdded={onFilesAdded}
+        onRemoved={onRemoved}
+        onProgress={onProgress}
+        onUploaded={onUploaded}
+        onSuccess={onSuccess}
+        onFail={onFail}
+        onAllFilesSuccess={onAllFilesSuccess}
+      ></Uploader>
+    </>
+  )
+}
+```

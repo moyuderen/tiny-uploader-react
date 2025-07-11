@@ -1,0 +1,78 @@
+---
+sidebar_position: 1
+title: Methods
+---
+
+## clear
+
+- **Description**: Clears the upload list; if there are files being uploaded, cancels the upload and removes them
+- **Type**: `() => void`
+
+```tsx live
+function DefaultFileListExample(params) {
+  const uploaderRef = useRef<UploaderRef>(null);
+
+  const defaultFileList = [{
+    id: 1,
+    name: 'default.jpg',
+    url: 'https://baidu.com',
+  }]
+
+  const options = {
+    action: 'https://tiny-uploader-server.vercel.app/file/upload',
+  }
+
+  const clear = () => {
+    uploaderRef.current?.clear();
+  }
+
+  return (
+    <>
+      <button onClick={clear}>Clear files</button>
+
+      <Uploader 
+        ref={uploaderRef}
+        defaultFileList={defaultFileList}
+        options={options}
+      />
+    </>
+  )
+}
+```
+
+## submit
+
+- **Description**: Manually submits the upload list
+- **Type**: `() => void`
+- **Example**
+
+```tsx live 
+function SubmitExample(params) {
+  const uploaderRef = useRef<UploaderRef>(null);
+
+  const defaultFileList = [{
+    id: 1,
+    name: 'default.jpg',
+    url: 'https://baidu.com',
+  }]
+
+  const submit = () => {
+    uploaderRef.current?.submit();
+  }
+
+  return (
+    <>
+      <button onClick={submit}>Submit files</button>
+
+      <Uploader 
+        ref={uploaderRef}
+        defaultFileList={defaultFileList}
+        options={{
+          autoUpload: false,
+          action: 'https://tiny-uploader-server.vercel.app/file/upload',
+        }}
+      />
+    </>
+  )
+}
+```

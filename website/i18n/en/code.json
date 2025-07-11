@@ -365,5 +365,13 @@
   },
   "feature.preCheckDescription": {
     "message": "Support to pre-check file status, such as uploaded, partial uploaded, not uploaded, seconds upload etc."
+  },
+  "theme.Playground.liveEditor": {
+    "message": "Live Editor",
+    "description": "The live editor label of the live codeblocks"
+  },
+  "theme.Playground.result": {
+    "message": "Result",
+    "description": "The result label of the live codeblocks"
   }
 }
