@@ -8,7 +8,7 @@ sidebar_position: 1
 ## 安装
 
 ```bash
-npm install tiny-uploader-react
+npm install @tinyuploader/react
 ```
 
 ## 使用
