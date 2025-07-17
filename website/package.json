@@ -22,6 +22,7 @@
     "@docusaurus/core": "3.8.1",
     "@docusaurus/preset-classic": "3.8.1",
     "@docusaurus/theme-live-codeblock": "^3.8.1",
+    "@easyops-cn/docusaurus-search-local": "^0.52.0",
     "@mdx-js/react": "^3.0.0",
     "@tinyuploader/react": "^1.1.0-alpha.2",
     "clsx": "^2.0.0",
