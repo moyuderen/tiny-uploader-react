@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/tiny-uploader-react/:path*",
+      "destination": "/:path*"
+    }
+  ]
+}
