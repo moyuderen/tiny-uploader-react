@@ -181,6 +181,15 @@ const config: Config = {
       minHeadingLevel: 2, // 默认
       maxHeadingLevel: 3 // 默认是3，改为4以显示四级标题
     },
+    plugins: [
+      [
+        'vercel-analytics',
+        {
+          debug: true,
+          mode: 'auto',
+        },
+      ],
+    ],
   } satisfies Preset.ThemeConfig,
 };
 
